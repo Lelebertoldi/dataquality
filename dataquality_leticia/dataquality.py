@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import shutil
+from IPython.display import display, Markdown
 from .general import *  
 from .columns import * 
 
@@ -22,23 +23,27 @@ class RelatorioCSV:
         plt.close()  # Fecha a figura  
 
 
-    # Chama os métodos no arquivo geral.py
+    # Chama os métodos no arquivo general.py
     def geral(self):
         head(self)
+        sample(self)
         tail(self)
         shape(self)
         columns(self)
         describe(self)
         duplicated(self)
+        missing_values(self)
         heat_matrix(self)
+        print(f"\n ____________________________________________________________________________________________________________________________________________ \n")
+        print(f"\n ____________________________________________________________________________________________________________________________________________ \n")
 
 
-    # Chama os métodos no arquivo colunas.py e itera eles sobre cada coluna do DataFrame
+    # Chama os métodos no arquivo columns.py e itera eles sobre cada coluna do DataFrame
     def colunas(self):
         for coluna in self.df.columns:
-            texto = f"\n ==*==*==*== Relatório da Coluna: {coluna}  ==*==*==*== \n\n "
+            display(Markdown(f"## Relatório da Coluna: {coluna}"))
+            texto = f"\nRelatório da Coluna: {coluna}\n\n "
             self.salvar_texto_pdf(texto)
-            print(texto)
             column_type(self, coluna)
             quantity_null(self, coluna)
             quantity_unique(self, coluna)
@@ -49,7 +54,8 @@ class RelatorioCSV:
             distribution_graph(self, coluna)
             categorical_graph(self, coluna)
             groupby_date(self, coluna)
-            print(f"\n ______________________________________________________________________________ \n")
+            print(f"\n ____________________________________________________________________________________________________________________________________________ \n")
+            print(f"\n ____________________________________________________________________________________________________________________________________________ \n")
 
 
     def fechar_pdf(self):
@@ -85,3 +91,4 @@ class RelatorioCSV:
             print(f"Relatório exportado para {caminho_arquivo}.")
         except PermissionError as e:
             print(f"Erro ao mover o arquivo: {e}")
+
