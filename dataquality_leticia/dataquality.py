@@ -79,7 +79,6 @@ class RelatorioCSV:
 
 
     def exportar_relatorio(self):
-        self.fechar_pdf() # Por garantia
         # Pergunta ao usuário onde salvar o arquivo
         caminho_diretorio = input("Digite o caminho completo para salvar o relatório: ")
         nome_arquivo = "relatorio_CSV.pdf"

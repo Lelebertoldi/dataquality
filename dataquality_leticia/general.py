@@ -75,11 +75,14 @@ def missing_values(instance):
         'Contagem de Nulos': null_counts.values,
         'Porcentagem de Nulos': null_percentages.round(2).astype(str) + '%'})
     # Filtrar para apenas colunas com valores nulos
-    missing_values_df = missing_values_df[missing_values_df['Contagem de Nulos'] > 0]    
+    # Preencher valores nulos com 0 e 0%
+    missing_values_df['Contagem de Nulos'] = missing_values_df['Contagem de Nulos'].fillna(0).astype(int)
+    missing_values_df['Porcentagem de Nulos'] = missing_values_df['Porcentagem de Nulos'].replace('nan%', '0.00%')
     # Exibir o relatório
     display(Markdown("## Valores Faltantes"))
     display(missing_values_df)
-    print("\n")  
+    print("\n")
+    instance.salvar_texto_pdf(f"Valores Faltantes\n {missing_values_df}")  
     # Exibir gráfico se houver valores faltantes
     if not missing_values_df.empty:
         plt.figure(figsize=(10, 6))
@@ -89,6 +92,7 @@ def missing_values(instance):
         plt.xlabel('Nome da coluna')
         plt.ylabel('Contagem de Nulos')
         plt.tight_layout()
+        instance.pdf_pages.savefig(plt.gcf())
         plt.show()
     else:
         print("Não há valores faltantes no DataFrame.")
