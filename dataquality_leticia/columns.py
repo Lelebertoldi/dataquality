@@ -56,18 +56,30 @@ def value_counts(instance, coluna):
     else:
         # Valores únicos da coluna (sem considerar possíveis índices)
         texto = f"\nListagem dos valores únicos e quantas vezes aparecem\n"
-        instance.salvar_texto_pdf(texto + str(instance.df[coluna].value_counts()))
-        print(texto)
-        vc_df = pd.DataFrame(instance.df[coluna].value_counts())
-        display(vc_df)                
-        # Calcular a contagem e % de cada valor único e de nulos
-        contagem = instance.df[coluna].value_counts(dropna=False)               
-        percentual = contagem / len(instance.df) * 100
-        texto = f"\nDistribuição dos valores por percentual: "
-        df_percentual = pd.DataFrame({'Contagem': contagem, 'Percentual (%)': percentual})
-        instance.salvar_texto_pdf(texto + df_percentual.to_string())
-        print(texto)
-        display(df_percentual)
+        unique_count = instance.df[coluna].nunique()
+        
+        # Verifica se a coluna tem mais de 50 valores únicos
+        if unique_count > 50:
+            texto += f"A coluna possui mais de 50 valores únicos ({unique_count} no total). Exibindo os 50 mais frequentes:\n"
+            # Seleciona os 50 valores mais frequentes
+            vc_df = pd.DataFrame(instance.df[coluna].value_counts().nlargest(50))
+            instance.salvar_texto_pdf(texto + str(vc_df))
+            print(texto)
+            display(vc_df) 
+        else:
+            # Exibe todos os valores únicos se tiver menos de 50
+            vc_df = pd.DataFrame(instance.df[coluna].value_counts())
+            instance.salvar_texto_pdf(texto + str(vc_df))
+            print(texto)
+            display(vc_df)                      
+            # Calcula a contagem e % de cada valor único e de nulos (se tiver menos de 50)
+            contagem = instance.df[coluna].value_counts(dropna=False)               
+            percentual = contagem / len(instance.df) * 100
+            texto = f"\nDistribuição dos valores por percentual: "
+            df_percentual = pd.DataFrame({'Contagem': contagem, 'Percentual (%)': percentual})
+            instance.salvar_texto_pdf(texto + df_percentual.to_string())
+            print(texto)
+            display(df_percentual)
 
 
 # Estatísticas da coluna para qualquer tipo

@@ -51,8 +51,8 @@ relatorio.exportar_relatorio()
 - Distribuição Percentual de Valores Nulos
 - Distribuição Percentual dos Valores Únicos
 - Se é Possivel Coluna de Índice (todos os valores são únicos)
-- Listagem dos Valores Únicos e Quantas Vezes Aparecem (Apenas para coluna que não seja possível Índice)
-- Distribuição dos Valores por Percentual (Apenas para coluna que não seja possível Índice)
+- Listagem dos Valores Únicos e Quantas Vezes Aparecem (Apenas para coluna que não seja possível Índice, se tiver mais de 50 valores únicos mostra os 50 mais frequentes)
+- Distribuição dos Valores por Percentual (Apenas para coluna que não seja possível Índice e tenha menos de 50 valores únicos)
 - Estatísticas Descritivas
 - Gráfico de Frequência da Coluna (Para colunas categóricas)
 - Gráfico de Distribuição da Coluna (Para colunas numéricas)
@@ -60,6 +60,8 @@ relatorio.exportar_relatorio()
 
 ---
 
-
+> [!IMPORTANT]
+>- **Configurações do Arquivo PDF Ainda Precisam de Ajustes, Algumas Páginas Estão Sendo Cortadas**
+>
 
 
