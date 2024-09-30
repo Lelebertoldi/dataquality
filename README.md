@@ -22,8 +22,11 @@ relatorio.relatotio_geral()
 # Para análise coluna por coluna (sem análise geral)
 relatorio.relatorio_colunas()
 
-# Para salvar última análise feita em um arquivo PDF, necessário informar caminho onde arquivo será salvo no input
+# Para salvar última análise feita em um arquivo PDF (necessário informar caminho onde arquivo será salvo no input)
 relatorio.exportar_relatorio()
+
+# Gera um relatório Sweetviz em HTML (usa os métodos do Sweetviz para fazer a análise, e não os métodos contidos nesse Dataquality)
+relatorio.gerar_relatorio_html()
 
 ```
 
@@ -61,7 +64,7 @@ relatorio.exportar_relatorio()
 ---
 
 > [!IMPORTANT]
->- **Configurações do Arquivo PDF Ainda Precisam de Ajustes, Algumas Páginas Estão Sendo Cortadas**
+>- **Configurações do Arquivo PDF Ainda Precisam de Ajustes, Algumas Páginas Estão Saindo Cortadas**
 >
 
 
