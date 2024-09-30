@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from IPython.display import display
+import warnings
 
 
 # Tipo de coluna
@@ -118,17 +119,29 @@ def categorical_graph(instance, coluna):
 
 # Análise de séries temporais (se aplicável)
 def groupby_date(instance, coluna):
+    # Ignora o aviso sobre formato de data
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=UserWarning)
+        # Verificar se a coluna é do tipo 'object' (string) e tentar converter para datetime
+        if instance.df[coluna].dtype == 'object':
+            # Se tiver valores de data converte, e valores mal formatados são substituidos por NaT (Not a Time)
+            instance.df[coluna] = pd.to_datetime(instance.df[coluna], errors='coerce')
+    # Se for qualquer tipo de data
     if pd.api.types.is_datetime64_any_dtype(instance.df[coluna]):
-        texto = f"\nDados agrupados por ano: \n {instance.df[coluna].groupby(instance.df[coluna].dt.year).count()}"
-        instance.salvar_texto_pdf(texto)
-        print(texto) 
-        tendencia_mensal = instance.df[coluna].dt.to_period('M').value_counts().sort_index()
-        texto = f"Tendência mensal:\n {tendencia_mensal}"
-        instance.salvar_texto_pdf(texto)
-        print(texto) 
-        # Gráfico de tendência
-        instance.df[coluna].groupby(instance.df[coluna].dt.year).count().plot(kind='line', title=f'Tendência temporal da coluna {coluna}')
-        # Salvar o gráfico no PDF
-        instance.pdf_pages.savefig(plt.gcf())
-        plt.show()
-        plt.close()
+        if instance.df[coluna].notna().sum() > 0:  # Certifica-se de que há dados não nulos
+            texto = f"\nDados agrupados por ano: \n {instance.df[coluna].groupby(instance.df[coluna].dt.year).count()}"
+            instance.salvar_texto_pdf(texto)
+            print(texto)
+
+            tendencia_mensal = instance.df[coluna].dt.to_period('M').value_counts().sort_index()
+            texto = f"\n\nTendência mensal:\n {tendencia_mensal}"
+            instance.salvar_texto_pdf(texto)
+            print(texto)
+
+            # Gráfico de tendência
+            if not tendencia_mensal.empty:
+                instance.df[coluna].groupby(instance.df[coluna].dt.year).count().plot(kind='line', title=f'Tendência temporal da coluna {coluna}')
+                # Salvar o gráfico no PDF
+                instance.pdf_pages.savefig(plt.gcf())
+                plt.show()
+                plt.close()
