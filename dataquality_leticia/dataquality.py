@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import shutil
+import sweetviz as sv
 from IPython.display import display, Markdown
 from .general import *  
 from .columns import * 
@@ -76,6 +77,13 @@ class RelatorioCSV:
     def relatorio_colunas(self):
         self.colunas()
         self.fechar_pdf()
+
+
+# Gera o relatório HTML do Sweetviz
+    def gerar_relatorio_html(self, nome_arquivo_html="relatorio_sweetviz.html"):
+        print(f"Gerando relatório Sweetviz no arquivo: {nome_arquivo_html}")
+        relatorio_sweetviz = sv.analyze(self.df)  # Análise Sweetviz no DataFrame
+        relatorio_sweetviz.show_html(filepath=nome_arquivo_html, open_browser=False)  # Gera o HTML
 
 
     def exportar_relatorio(self):
